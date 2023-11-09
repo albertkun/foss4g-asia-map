@@ -18,16 +18,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 <style>
-    .custom-icon {
-        background: #ff7800;
-        border-radius: 50%;
-        border: 2px solid #ffffff;
-        text-align: center;
-        width: 30px;
-        height: 30px;
-        line-height: 30px;
-        color: #ffffff;
-    }
+    
     .leaflet-popup-content {
         width: auto !important;
     }
@@ -113,10 +104,6 @@ body {
 var map = L.map('map').setView([37.5665, 126.9780], 15);
 // Add a tile layer to the map
 
-let circleMarker = new L.CircleMarker(null, {
-    radius: 5,  // Radius of the circle marker. Adjust as needed.
-    color: '#f00',  // Color of the circle marker. Adjust as needed.
-});
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '©OpenStreetMap, ©CartoDB',
     maxZoom: 19,
@@ -172,16 +159,30 @@ let drawControl = new L.Control.Draw({
         rectangle: false,
         circle: false,
         circlemarker: false,
-        marker: {
-            icon: circleMarker
-        }
     },
     edit: {
         featureGroup: drawnItems
     }
 });
 map.addControl(drawControl);
-
+let categoryStyles = {
+    'hotel': {
+        icon: 'fa-hotel',
+        color: 'red'
+    },
+    'restaurant': {
+        icon: 'fa-utensils',
+        color: 'green'
+    },
+    'landmark': {
+        icon: 'fa-landmark',
+        color: 'blue'
+    },
+    'airbnb': {
+        icon: 'fa-building',
+        color: 'red'
+    }
+};
 map.on('draw:created', function (e) {
     let type = e.layerType,
         layer = e.layer;
@@ -190,7 +191,19 @@ map.on('draw:created', function (e) {
         // It's a marker, get the LatLng and show a form in the popup
         let coords = layer.getLatLng();
         let formHTML = `
-            <form id="pointForm" class="ui form">
+        <style>
+            @media (max-width: 600px) {
+                .popup-form {
+                    width: 90vw;
+                }
+            }
+            @media (min-width: 601px) {
+                .popup-form {
+                    width: 600px;
+                }
+            }
+        </style>
+        <form id="pointForm" class="ui form popup-form">
                 <div class="field">
                     <label>Name</label>
                     <input type="text" id="name" placeholder="Name" required>
@@ -328,13 +341,13 @@ fetch('http://192.168.50.112:3000/api')
             if (item.price) {
                 if (isValidLatLng(item.latitude, item.longitude)) {
                     let style = categoryStyles[item.category];
+                    
                     let marker = L.marker([item.latitude, item.longitude], {
-                        icon: L.icon({
-                            iconUrl: `path/to/icons/${style.icon}.png`,
-                            iconSize: [25, 41],
-                            iconAnchor: [12, 41],
-                            popupAnchor: [1, -34],
-                            shadowSize: [41, 41]
+                        icon: L.divIcon({
+                            className: 'custom-icon',
+                            html: `<div style="background-color: lightgray; border: 3px solid white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"><i class="fas ${style.icon} fa-2x" style="color: ${style.color};"></i></div>`,
+                            iconSize: [40, 40],
+                            iconAnchor: [20, 20],
                         })
                     });
                     // Determine which emoji to use based on the price
@@ -388,9 +401,9 @@ legend.onAdd = function (map) {
 legend.addTo(map);
 let customIcon = L.divIcon({
     className: 'custom-icon',
-    html: '<i class="fas fa-users fa-2x"></i>',
-    iconSize: [30, 30],
-    iconAnchor: [15, 30],
+    html: '<div style="background-color: orange; border: 3px solid white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-users fa-2x" style="color: black;"></i></div>',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
 });
 
 L.marker([37.5669, 126.9784], {icon: customIcon}).addTo(map).bindPopup('Seoul Hall of Urbanism and Architecture <br> <a href="https://map.naver.com/v5/directions/-/14108066.605411386,4506716.573711312,Seoul+Hall+of+Urbanism+and+Architecture,126.9783882,37.5666103,PLACE_POI/-/transit">Directions</a>');</script>
