@@ -380,8 +380,9 @@ function loadData(){
       // Bind a popup to the marker with the desired information
                     marker.bindPopup(`
                         ${item.name ? `<b>Name:</b> ${item.name}<br>` : ''}
+                        ${item.price ? `<b>${emoji}<br></b>` : ''}
+
                         ${item.description ? `<b>Description:</b> ${item.description}<br>` : ''}
-                        ${item.price ? `<b>Price:</b> ${item.price} ${emoji}<br>` : ''}
                         ${item.url ? `<b>URL:</b> <a href="${item.url}">${item.url}</a><br>` : ''}
                         <button onclick="deleteMarker('${item.id}')"><i class="fas fa-trash"></i></button>        
                     `);
