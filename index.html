@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MapLibre 3D Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+<script src="https://cdn.ably.io/lib/ably.min-1.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+<style>
+    .leaflet-popup-content {
+        width: auto !important;
+    }
+</style>
+
+</head>
+<body>
+    <!-- <button id="download">Download GeoJSON</button> -->
+    <div id='map' style='width: 100%; height: 600px;'></div>
+    <script>
+// Initialize the map
+var map = L.map('map').setView([37.5665, 126.9780], 15);
+// Add a tile layer to the map
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '©OpenStreetMap, ©CartoDB',
+    maxZoom: 19,
+}).addTo(map);
+// Define drawControl with draw and edit options
+// Create a new layer group
+
+
+// Initialize the FeatureGroup to store editable layers
+let drawnItems = new L.FeatureGroup();
+map.addLayer(drawnItems);
+
+// Initialize the draw control and pass it the FeatureGroup of editable layers
+let drawControl = new L.Control.Draw({
+    draw: {
+        polyline: false,
+        polygon: false,
+        rectangle: false,
+        circle: false,
+        circlemarker: false,
+    },
+    edit: {
+        featureGroup: drawnItems
+    }
+});
+map.addControl(drawControl);
+map.on('draw:created', function (e) {
+    let type = e.layerType,
+        layer = e.layer;
+
+    if (type === 'marker') {
+        
+        // It's a marker, get the LatLng and show a form in the popup
+        let coords = layer.getLatLng();
+        let formHTML = `
+            <form id="pointForm" class="ui form">
+                <div class="field">
+                    <label>Name</label>
+                    <input type="text" id="name" placeholder="Name" required>
+                </div>
+                <div class="field">
+                    <label>Description</label>
+                    <input type="text" id="description" placeholder="Description" required>
+                </div>
+                <div class="field">
+                    <label>Price</label>
+                    <input type="text" id="price" placeholder="Price" required pattern="^[0-9]*\.?[0-9]+$">
+                </div>
+                <div class="field">
+                    <label>URL</label>
+                    <input type="text" id="url" placeholder="URL" >
+                </div>
+                <button id="saveButton" class="ui button">Save</button>
+            </form>`;
+        layer.bindPopup(formHTML);
+        drawnItems.addLayer(layer);
+        layer.on('popupopen', function(e) {
+            setTimeout(function() {
+                e.popup._container.style.width = window.innerWidth * 0.5 + 'px';
+            }, 1);
+        });
+        layer.openPopup();
+
+        document.getElementById('pointForm').addEventListener('submit', function(e) {
+    
+            if (document) {
+                console.log(document);
+                // Handle validation errors here
+            } else {
+                if (e.target.id === 'saveButton') {
+                    console.log('Save button clicked');
+                    let name = document.getElementById('name').value;
+                    let description = document.getElementById('description').value;
+                    let price = document.getElementById('price').value;
+                    let url = document.getElementById('url').value;
+
+                    // Validate price
+
+                    let pointData = {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',
+                            coordinates: [coords.lng, coords.lat]
+                        },
+                        properties: {
+                            name: name,
+                            price: price,
+                            url: url,
+                            description: description
+                        }
+                    };
+            
+                    // Send the data to the server
+                    fetch('http://192.168.50.112:3000/api', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(pointData)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Data successfully saved:', data);
+                        layer.closePopup();
+                    })
+                    .catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                    });
+                }
+            }
+        });
+    }
+});
+
+let layer;
+document.addEventListener('click', function(e) {
+
+});
+
+    // Add the layer to the editable layers
+
+
+map.on('draw:deleted', function (e) {
+    if (e.target.id === 'saveButton') {
+        let layers = e.layers;
+    
+        layers.eachLayer(function (layer) {
+            // Assuming each layer has an ID, send a DELETE request for each one
+            fetch(`http://192.168.50.112:3000/api/${layer.id}`, {
+                method: 'DELETE',
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(message => {
+                console.log(message);
+            });
+        });
+    }
+    
+});
+function getColor(price) {
+    // Adjust these values as needed
+    const lowPrice = 0;
+    const highPrice = 500;
+
+    const ratio = (price - lowPrice) / (highPrice - lowPrice);
+    const red = Math.round(ratio * 255);
+    const color = `rgb(${red}, 0, 0)`;
+
+    return color;
+}
+
+fetch('http://192.168.50.112:3000/api')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // `data` is the data from your server
+        console.log(data);
+        data.forEach(item => {
+            if (item.price) {
+                if (isValidLatLng(item.latitude, item.longitude)) {
+                    let radius = item.price / 10; // Adjust this calculation as needed
+                    let color = getColor(item.price);
+                    let marker = L.circleMarker([item.latitude, item.longitude], { color: color });
+
+                    // Determine which emoji to use based on the price
+                    let emoji = item.price < 50 ? '😃' : '💰'; // Adjust this condition as needed
+
+                    // Bind a popup to the marker with the desired information
+                    marker.bindPopup(`
+                        <b>Name:</b> ${item.name}<br>
+                        <b>Description:</b> ${item.description}<br>
+                        <b>Price:</b> ${item.price} ${emoji}<br>
+                        <b>URL:</b> <a href="${item.url}">${item.url}</a>
+                    `);
+
+                    // Add the marker to the map
+                    marker.addTo(map);
+                } else {
+                    console.log('Invalid LatLng:', item);
+                }
+            }
+        });
+    })
+    .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+    });
+
+    function isValidLatLng(lat, lng) {
+        if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+            return false;
+        }
+        return true;
+    }
+    </script>
+
+</body>
+</html>
