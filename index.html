@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>MapLibre 3D Map</title>
+    <title>Foss4g asia map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
@@ -12,32 +12,158 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 <style>
+    .custom-icon {
+        background: #ff7800;
+        border-radius: 50%;
+        border: 2px solid #ffffff;
+        text-align: center;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        color: #ffffff;
+    }
     .leaflet-popup-content {
         width: auto !important;
     }
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background: #f3f3f3;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    h1, h3 {
+        text-align: center;
+    }
+
+
+    @media screen and (min-width: 600px) {
+        body {
+            font-size: 18px;
+        }
+    }
+
+    @media screen and (min-width: 900px) {
+        body {
+            font-size: 20px;
+        }
+    }#map {
+    width: 100%;
+    height: 100vh; /* Use vh (viewport height) units to make the map take up the full height of the screen */
+}
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+}
+
+@media screen and (min-width: 600px) {
+    body {
+        font-size: 22px;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    body {
+        font-size: 24px;
+    }
+}
+
+#map {
+    width: 100%;
+    height: 80vh; /* Adjust this value as needed */
+}
+.info.legend {
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+}
+
+@media screen and (min-width: 600px) {
+    .info.legend {
+        font-size: 22px;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .info.legend {
+        font-size: 24px;
+    }
+}
 </style>
 
 </head>
 <body>
+    <h1>
+        Foss4g asia map
+    </h1>
+    <h3>As curated by Lindsey</h3>
     <!-- <button id="download">Download GeoJSON</button> -->
     <div id='map' style='width: 100%; height: 600px;'></div>
     <script>
 // Initialize the map
 var map = L.map('map').setView([37.5665, 126.9780], 15);
 // Add a tile layer to the map
+
+let circleMarker = new L.CircleMarker(null, {
+    radius: 5,  // Radius of the circle marker. Adjust as needed.
+    color: '#f00',  // Color of the circle marker. Adjust as needed.
+});
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '©OpenStreetMap, ©CartoDB',
     maxZoom: 19,
 }).addTo(map);
 // Define drawControl with draw and edit options
 // Create a new layer group
+let categoryColors = {
+    hotel: 'red',
+    airbnb: 'red',
+    landmark: 'blue',
+    food: 'green'
+};
+let AwesomeMarkersIcon = L.Icon.extend({
+    options: {
+        iconSize: [35, 45],
+        iconAnchor: [17, 42],
+        popupAnchor: [1, -32],
+    }
+});
 
-
+let categoryIcons = {
+    hotel: L.divIcon({ className: 'fa fa-hotel fa-2x', iconSize: [20, 20] }),
+    landmark: L.divIcon({ className: 'fa fa-landmark fa-2x', iconSize: [20, 20] }),
+    airbnb: L.divIcon({ className: 'fa fa-building fa-2x', iconSize: [20, 20] }),
+    food: L.divIcon({ className: 'fa fa-pizza-slice fa-2x', iconSize: [20, 20] })
+};
 // Initialize the FeatureGroup to store editable layers
 let drawnItems = new L.FeatureGroup();
 map.addLayer(drawnItems);
+var geocoder = L.Control.geocoder({
+    defaultMarkGeocode: false,
+    collapsed: false,
+    expand: 'click'
 
+})
+.on('markgeocode', function(e) {
+    var bbox = e.geocode.bbox;
+    var poly = L.polygon([
+         bbox.getSouthEast(),
+         bbox.getNorthEast(),
+         bbox.getNorthWest(),
+         bbox.getSouthWest()
+    ]);
+    map.fitBounds(poly.getBounds());
+    L.marker([e.geocode.center.lat, e.geocode.center.lng]).addTo(map);
+})
+.addTo(map);
 // Initialize the draw control and pass it the FeatureGroup of editable layers
 let drawControl = new L.Control.Draw({
     draw: {
@@ -46,18 +172,21 @@ let drawControl = new L.Control.Draw({
         rectangle: false,
         circle: false,
         circlemarker: false,
+        marker: {
+            icon: circleMarker
+        }
     },
     edit: {
         featureGroup: drawnItems
     }
 });
 map.addControl(drawControl);
+
 map.on('draw:created', function (e) {
     let type = e.layerType,
         layer = e.layer;
 
     if (type === 'marker') {
-        
         // It's a marker, get the LatLng and show a form in the popup
         let coords = layer.getLatLng();
         let formHTML = `
@@ -78,69 +207,67 @@ map.on('draw:created', function (e) {
                     <label>URL</label>
                     <input type="text" id="url" placeholder="URL" >
                 </div>
+                <div class="field">
+                    <label>Category</label>
+                    <select id="category">
+                        <option value="hotel">Hotel</option>
+                        <option value="landmark">Landmark</option>
+                        <option value="airbnb">Airbnb</option>
+                        <option value="food">Food</option>
+                    </select>
+                </div>
                 <button id="saveButton" class="ui button">Save</button>
             </form>`;
         layer.bindPopup(formHTML);
         drawnItems.addLayer(layer);
-        layer.on('popupopen', function(e) {
-            setTimeout(function() {
-                e.popup._container.style.width = window.innerWidth * 0.5 + 'px';
-            }, 1);
-        });
         layer.openPopup();
 
         document.getElementById('pointForm').addEventListener('submit', function(e) {
-    
-            if (document) {
-                console.log(document);
-                // Handle validation errors here
-            } else {
-                if (e.target.id === 'saveButton') {
-                    console.log('Save button clicked');
-                    let name = document.getElementById('name').value;
-                    let description = document.getElementById('description').value;
-                    let price = document.getElementById('price').value;
-                    let url = document.getElementById('url').value;
-
-                    // Validate price
-
-                    let pointData = {
-                        type: 'Feature',
-                        geometry: {
-                            type: 'Point',
-                            coordinates: [coords.lng, coords.lat]
-                        },
-                        properties: {
-                            name: name,
-                            price: price,
-                            url: url,
-                            description: description
-                        }
-                    };
-            
-                    // Send the data to the server
-                    fetch('http://192.168.50.112:3000/api', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(pointData)
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Data successfully saved:', data);
-                        layer.closePopup();
-                    })
-                    .catch(error => {
-                        console.error('There has been a problem with your fetch operation:', error);
-                    });
+            e.preventDefault();
+            let name = document.getElementById('name').value;
+            let description = document.getElementById('description').value;
+            let price = document.getElementById('price').value;
+            let url = document.getElementById('url').value;
+            let category = document.getElementById('category').value;
+            let style = categoryStyles[category];
+                        
+            let pointData = {
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: [coords.lng, coords.lat]
+                },
+                properties: {
+                    name: name,
+                    price: price,
+                    url: url,
+                    description: description,
+                    category: category,
+                    style: style
                 }
-            }
+            };
+    
+            // Send the data to the server
+            fetch('http://192.168.50.112:3000/api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(pointData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data successfully saved:', data);
+                layer.closePopup();
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
         });
     }
 });
@@ -200,10 +327,16 @@ fetch('http://192.168.50.112:3000/api')
         data.forEach(item => {
             if (item.price) {
                 if (isValidLatLng(item.latitude, item.longitude)) {
-                    let radius = item.price / 10; // Adjust this calculation as needed
-                    let color = getColor(item.price);
-                    let marker = L.circleMarker([item.latitude, item.longitude], { color: color });
-
+                    let style = categoryStyles[item.category];
+                    let marker = L.marker([item.latitude, item.longitude], {
+                        icon: L.icon({
+                            iconUrl: `path/to/icons/${style.icon}.png`,
+                            iconSize: [25, 41],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34],
+                            shadowSize: [41, 41]
+                        })
+                    });
                     // Determine which emoji to use based on the price
                     let emoji = item.price < 50 ? '😃' : '💰'; // Adjust this condition as needed
 
@@ -233,7 +366,34 @@ fetch('http://192.168.50.112:3000/api')
         }
         return true;
     }
-    </script>
+
+// Add a legend to the map
+let legend = L.control({ position: 'bottomright' });
+
+legend.onAdd = function (map) {
+    let div = L.DomUtil.create('div', 'info legend');
+    let categories = ['hotel', 'airbnb', 'landmark', 'food'];
+    let icons = ['fa-hotel', 'fa-landmark', 'fa-building', 'fa-pizza-slice'];
+
+    // loop through our categories and generate a label with a colored square for each category
+    for (let i = 0; i < categories.length; i++) {
+        div.innerHTML +=
+            '<i class="fas ' + icons[i] + '" style="color: ' + categoryColors[categories[i]] + ';"></i> ' +
+            categories[i] + '<br>';
+    }
+
+    return div;
+};
+
+legend.addTo(map);
+let customIcon = L.divIcon({
+    className: 'custom-icon',
+    html: '<i class="fas fa-users fa-2x"></i>',
+    iconSize: [30, 30],
+    iconAnchor: [15, 30],
+});
+
+L.marker([37.5669, 126.9784], {icon: customIcon}).addTo(map).bindPopup('Seoul Hall of Urbanism and Architecture <br> <a href="https://map.naver.com/v5/directions/-/14108066.605411386,4506716.573711312,Seoul+Hall+of+Urbanism+and+Architecture,126.9783882,37.5666103,PLACE_POI/-/transit">Directions</a>');</script>
 
 </body>
 </html>
