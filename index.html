@@ -89,6 +89,22 @@ body {
         font-size: 24px;
     }
 }
+@keyframes pulsate {
+    0% { transform: scale(0.1, 0.1); opacity: 0.0; }
+    50% { opacity: 1.0; }
+    100% { transform: scale(1.2, 1.2); opacity: 0.0; }
+}
+
+.pulsating-icon {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border: 5px solid #f00;
+    border-radius: 50%;
+    animation: pulsate 1s ease-out;
+    animation-iteration-count: infinite;
+    opacity: 0.0;
+}
 </style>
 
 </head>
@@ -103,7 +119,26 @@ body {
 // Initialize the map
 var map = L.map('map').setView([37.5665, 126.9780], 15);
 // Add a tile layer to the map
+if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+        map.setView([lat, lon], 15);
 
+        // Create a custom icon
+        var pulsatingIcon = L.divIcon({
+            className: 'pulsating-icon',
+            iconSize: [10, 10]
+        });
+
+        // Add a marker at the user's location with the custom icon
+        L.marker([lat, lon], {icon: pulsatingIcon}).addTo(map);
+    }, function(error) {
+        console.error("Error occurred while getting location: " + error.message);
+    });
+} else {
+    console.log("Geolocation is not supported by this browser.");
+}
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '©OpenStreetMap, ©CartoDB',
     maxZoom: 19,
@@ -448,6 +483,27 @@ legend.onAdd = function (map) {
     return div;
 };
 loadData() 
+fetch('foodplaces.geojson')
+    .then(response => response.json())
+    .then(data => {
+        L.geoJSON(data, {
+            // Create a custom marker for each feature
+            pointToLayer: function(feature, latlng) {
+                return L.marker(latlng, {
+                    icon: L.divIcon({
+                        className: 'fa ' + categoryStyles.restaurant.icon,
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 15],
+                        popupAnchor: [0, -15]
+                    })
+                });
+            },
+            // Create a popup for each feature
+            onEachFeature: function(feature, layer) {
+                layer.bindPopup('<b>' + feature.properties.Title + '</b><br>' + feature.properties.Description + '<br>' + feature.properties.Hours);
+            }
+        }).addTo(map);
+    });
 legend.addTo(map);
 let customIcon = L.divIcon({
     className: 'custom-icon',
@@ -459,4 +515,9 @@ let customIcon = L.divIcon({
 L.marker([37.5669, 126.9784], {icon: customIcon}).addTo(map).bindPopup('Seoul Hall of Urbanism and Architecture <br> <a href="https://map.naver.com/v5/directions/-/14108066.605411386,4506716.573711312,Seoul+Hall+of+Urbanism+and+Architecture,126.9783882,37.5666103,PLACE_POI/-/transit">Directions</a>');</script>
 
 </body>
+<style>
+    .leaflet-popup-content {
+        width: 50vw !important;
+    }
+</style>
 </html>

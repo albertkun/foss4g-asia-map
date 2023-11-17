@@ -1,0 +1,205 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    126.9864823865066,
+                    37.57348879224554
+                ]
+            },
+            "properties": {
+                "Address": "4, Insadong-gil, Jongno-gu, Seoul, South Korea",
+                "Title": "Venue Maru JaYeonSik Kimbap",
+                "Description": "\ub9c8\ub8e8 \uc790\uc5f0\uc2dd\uae40\ubc25  is a traditional Korean restaurant in Insadong serving bunsik, kimbap, udon, dumbling, stir fry spicy rice paste(TTeok), fish cake soup, and more. Occasionally closes at 5:00pm (twice a month 1st and 3rd Wednesday.) NOTE: Has signs associated with Loving Hut.",
+                "Hours": "Not available",
+                "Categories": "",
+                "URL": "https://www.google.com/maps/place/4%2C%2BInsadong-gil%2C%2BJongno-gu%2C%2BSeoul%2C%2BSouth%2BKorea/",
+                "Latitude": "37.57348879224554",
+                "Longitude": " 126.9864823865066"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    126.988556,
+                    37.574957
+                ]
+            },
+            "properties": {
+                "Address": " 33-18 Ikseon-dong, Jongno-gu",
+                "Title": "Venue Vegan Insa - \ube44\uac74\uc778\uc0ac",
+                "Description": "Vegan restaurant founded by followers of the Supreme Master. Serves modern Korean food and a few international dishes.",
+                "Hours": "Not available",
+                "Categories": "",
+                "URL": "https://www.google.com/maps/place/%2B33-18%2BIkseon-dong%2C%2BJongno-gu/",
+                "Latitude": "37.574957",
+                "Longitude": "126.988556"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    126.9852692688301,
+                    37.54617085652706
+                ]
+            },
+            "properties": {
+                "Address": " 10 sowolro 20 gil, Seoul, South Korea ",
+                "Title": "Venue ByTOFU",
+                "Description": "Plant based cafeteria and bakery serving salads, sandwiches, bowls and nachos made with faux meats. Also offers a selection of baked goods.",
+                "Hours": "Not available",
+                "Categories": "",
+                "URL": "https://www.google.com/maps/place/%2B10%2Bsowolro%2B20%2Bgil%2C%2BSeoul%2C%2BSouth%2BKorea%2B/",
+                "Latitude": "37.54617085652706",
+                "Longitude": " 126.9852692688301"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    126.98598549581317,
+                    37.55944248178016
+                ]
+            },
+            "properties": {
+                "Address": "21 Toegye-ro 20-gil Jung-gu, Seoul, South Korea ",
+                "Title": "Venue Vegan Kitchen - \ube44\uac74 \ud0a4\uce5c",
+                "Description": "A certified vegan and Halal Korean restaurant. Has plenty of options from which to choose.",
+                "Hours": "Not available",
+                "Categories": "",
+                "URL": "https://www.google.com/maps/place/21%2BToegye-ro%2B20-gil%2BJung-gu%2C%2BSeoul%2C%2BSouth%2BKorea%2B/",
+                "Latitude": "37.55944248178016",
+                "Longitude": " 126.98598549581317"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    126.972809,
+                    37.542919
+                ]
+            },
+            "properties": {
+                "Address": " 276-1, Hangang-daero, Yongsan-gu (at Sookmyung University), Seoul, South Korea ",
+                "Title": "Venue Cafe SIVA \uce74\ud398 \uc2dc\ubc14",
+                "Description": "Cafe of Triyoga studio. Serves vegan food and drinks including coffee, tea, bread, ice cream, wraps, burgers, and Korean snacks. Uses almond milk.",
+                "Hours": "Not available",
+                "Categories": "",
+                "URL": "https://www.google.com/maps/place/%2B276-1%2C%2BHangang-daero%2C%2BYongsan-gu%2B%28at%2BSookmyung%2BUniversity%29%2C%2BSeoul%2C%2BSouth%2BKorea%2B/",
+                "Latitude": "37.542919",
+                "Longitude": "126.972809"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    126.983223,
+                    37.480568
+                ]
+            },
+            "properties": {
+                "Address": " 55 Bangbaecheon-ro 4an-gil, Bangbae 2(i)-dong, Seocho-gu,",
+                "Title": "Venue Nammi Plant Lab",
+                "Description": "Plant-based cafe and vegan desserts bakery. Serves a variety of foods, everything from pasta and gnocchi to pizza, paella, and ramen. Has craft beer, wine, smoothies, juices, and coffee. Certified by the Korea Vegan Society (koreavegan.org).",
+                "Hours": "Not available",
+                "Categories": "",
+                "URL": "https://www.google.com/maps/place/%2B55%2BBangbaecheon-ro%2B4an-gil%2C%2BBangbae%2B2%28i%29-dong%2C%2BSeocho-gu%2C/",
+                "Latitude": "37.480568",
+                "Longitude": "126.983223"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    126.99423532435863,
+                    37.53319331896207
+                ]
+            },
+            "properties": {
+                "Address": "43, Yongsan-gu, Itaewon, Seoul, South Korea",
+                "Title": "Venue Plant Cafe & Kitchen - Itaewon",
+                "Description": "Vegan restaurant offering a variety of meals including salads, wraps, sandwiches, veggie burgers, lentil bowls, and pasta dinner. Serves craft beers, kombucha on tap, smoothies, and cold-pressed juices. Kitchen stops at 9pm. Reservations accepted, yet not same-day, Saturdays, or holidays. Est. 2013 originally as Alien's Day Out Bake Shop at Plant Studio at Itaewon-dong 63-15.",
+                "Hours": "Not available",
+                "Categories": "",
+                "URL": "https://www.google.com/maps/place/43%2C%2BYongsan-gu%2C%2BItaewon%2C%2BSeoul%2C%2BSouth%2BKorea/",
+                "Latitude": "37.53319331896207",
+                "Longitude": " 126.99423532435863"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    127.111427,
+                    37.511438
+                ]
+            },
+            "properties": {
+                "Address": "7, Ogeum-ro 17-gil, Songpa-gu , Seoul, South Korea",
+                "Title": "Venue Rooted \ub8e8\ud2f0\ub4dc",
+                "Description": "Fully vegan fusion cafe that aims to offer a safe space for no rush comfortable meals. Serves salads, sandwiches, roasted eggplant with lentil rice, banana bread, cookies, and a selection of drinks.",
+                "Hours": "Not available",
+                "Categories": "",
+                "URL": "https://www.google.com/maps/place/7%2C%2BOgeum-ro%2B17-gil%2C%2BSongpa-gu%2B%2C%2BSeoul%2C%2BSouth%2BKorea/",
+                "Latitude": "37.511438",
+                "Longitude": "127.111427"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    127.04003,
+                    37.518742
+                ]
+            },
+            "properties": {
+                "Address": " 6 2F, Seolleung-ro 135-gil, Gangnam-gu, Seoul, South Korea ",
+                "Title": "Venue Style Vegan - \uc2a4\ud0c0\uc77c\ube44\uac74",
+                "Description": "Delivery or takeaway/pick-up of vegan pizzas, burgers, and pasta dishes using ingredients like vegan cheese and beyond meat. Launched in 2020. Delivers in Gangnam area by motorcycle service and areas beyond that by quickservice delivery. Order via apps: BaedalMinchok, and CoupangEats. Relocated from Room 29, B2, 38, Hakdong-ro 43-gil.",
+                "Hours": "Not available",
+                "Categories": "",
+                "URL": "https://www.google.com/maps/place/%2B6%2B2F%2C%2BSeolleung-ro%2B135-gil%2C%2BGangnam-gu%2C%2BSeoul%2C%2BSouth%2BKorea%2B/",
+                "Latitude": "37.518742",
+                "Longitude": "127.040030"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    126.994461,
+                    37.532415
+                ]
+            },
+            "properties": {
+                "Address": "109, Bogwang-ro, Yongsan-gu, Seoul, South Korea",
+                "Title": "Venue Alt.a",
+                "Description": "Restaurant offering contemporary Asian cuisine. Menu is primarily a wide variety of Korean-Chinese offerings and a few fusion dishes.  A wide range of vegan drinks and vegan wine available. Certified by the Korea Vegan Society (koreavegan.org).",
+                "Hours": "Not available",
+                "Categories": "",
+                "URL": "https://www.google.com/maps/place/109%2C%2BBogwang-ro%2C%2BYongsan-gu%2C%2BSeoul%2C%2BSouth%2BKorea/",
+                "Latitude": "37.532415",
+                "Longitude": "126.994461"
+            }
+        }
+    ]
+}
