@@ -308,7 +308,7 @@ map.on('draw:created', function (e) {
             };
     
             // Send the data to the server
-            fetch('http://192.168.50.112:3000/api', {
+            fetch('http://192.168.50.112:3939/api', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -347,7 +347,7 @@ map.on('draw:deleted', function (e) {
     
         layers.eachLayer(function (layer) {
             // Assuming each layer has an ID, send a DELETE request for each one
-            fetch(`http://192.168.50.112:3000/api/${layer.id}`, {
+            fetch(`http://192.168.50.112:3939/api/${layer.id}`, {
                 method: 'DELETE',
             })
             .then(response => {
@@ -376,7 +376,7 @@ function getColor(price) {
 }
 
 function loadData(){
-    fetch('http://192.168.50.112:3000/api')
+    fetch('http://192.168.50.112:3939/api')
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -451,7 +451,7 @@ function deleteMarker(id) {
     // Show a confirmation dialog
     if (confirm('Are you sure you want to delete this marker?')) {
         // If the user clicked "OK", send a DELETE request to the server
-        fetch(`http://192.168.50.112:3000/api/${id}`, {
+        fetch(`http://192.168.50.112:3939/api/${id}`, {
             method: 'DELETE',
         })
         .then(response => {
